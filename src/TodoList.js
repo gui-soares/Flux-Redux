@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as TodoActions from './store/actons/todos';
 
-const TodoList = (props) => {
-  const { todos } = props;
-  return (
+const TodoList = ({ todos, addTodo, removeTodo }) => (
+  <Fragment>
     <ul>
       {todos.map(todo => (
-        <li key={todo.id}>{todo.text}</li>
+        <li key={todo.id}>
+          {todo.text}
+          <button type="button" onClick={() => removeTodo(todo.id)}>
+            Remover
+          </button>
+        </li>
       ))}
     </ul>
-  );
-};
+    <button type="button" onClick={() => addTodo('Novo Todo')}>
+      Adicionar
+    </button>
+  </Fragment>
+);
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
@@ -21,10 +30,17 @@ TodoList.propTypes = {
       text: PropTypes.string,
     }),
   ).isRequired,
+  addTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };
 
 const mapStatetoProps = state => ({
   todos: state.todos,
 });
 
-export default connect(mapStatetoProps)(TodoList);
+const mapDispatchToProps = dispatch => bindActionCreators(TodoActions, dispatch);
+
+export default connect(
+  mapStatetoProps,
+  mapDispatchToProps,
+)(TodoList);
