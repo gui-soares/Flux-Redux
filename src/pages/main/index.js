@@ -41,9 +41,7 @@ class Main extends Component {
       <Fragment>
         <form onSubmit={this.handleAddRepository}>
           <input placeholder="user/repo" value={repositoryInput} onChange={this.onChange} />
-          <button type="button" onClick={this.handleAddRepository}>
-            Add
-          </button>
+          <button type="submit">Add</button>
         </form>
 
         <ul>
