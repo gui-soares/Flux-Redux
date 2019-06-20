@@ -9,15 +9,18 @@ import * as FavoriteActions from '../../store/actons/favorite';
 
 class Main extends Component {
   static propTypes = {
-    addFavorite: PropTypes.func.isRequired,
-    favorites: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        url: PropTypes.string,
-      }),
-    ).isRequired,
+    addFavoriteRequest: PropTypes.func.isRequired,
+    favorites: PropTypes.shape({
+      loading: PropTypes.bool,
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+          description: PropTypes.string,
+          url: PropTypes.string,
+        }),
+      ),
+    }).isRequired,
   };
 
   state = {
@@ -30,8 +33,10 @@ class Main extends Component {
 
   handleAddRepository = (event) => {
     event.preventDefault();
-    const { addFavorite } = this.props;
-    addFavorite();
+    const { addFavoriteRequest } = this.props;
+    const { repositoryInput } = this.state;
+    addFavoriteRequest(repositoryInput);
+    this.setState({ repositoryInput: '' });
   };
 
   render() {
@@ -42,10 +47,11 @@ class Main extends Component {
         <form onSubmit={this.handleAddRepository}>
           <input placeholder="user/repo" value={repositoryInput} onChange={this.onChange} />
           <button type="submit">Add</button>
+          {favorites.loading && <span>Carregando...</span>}
         </form>
 
         <ul>
-          {favorites.map(favorite => (
+          {favorites.data.map(favorite => (
             <li key={favorite.id}>
               <p>
                 <strong>{favorite.name} </strong>({favorite.description})
