@@ -20,6 +20,7 @@ class Main extends Component {
           url: PropTypes.string,
         }),
       ),
+      error: PropTypes.oneOfType([null, PropTypes.string]),
     }).isRequired,
   };
 
@@ -48,6 +49,7 @@ class Main extends Component {
           <input placeholder="user/repo" value={repositoryInput} onChange={this.onChange} />
           <button type="submit">Add</button>
           {favorites.loading && <span>Carregando...</span>}
+          {!!favorites.error && <span style={{ color: '#f00' }}>{favorites.error}</span>}
         </form>
 
         <ul>
